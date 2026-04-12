@@ -1,26 +1,28 @@
 {
   "expo": {
-    "name": "billwise-app",
-    "slug": "billwise-app",
+    "name": "BillWise PK",
+    "slug": "billwise-pk",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "billwiseapp",
-    "userInterfaceStyle": "automatic",
+    "scheme": "billwisepk",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#080E1A"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.adnan.billwisepk"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#080E1A"
       },
+      "package": "com.adnan.billwisepk",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
