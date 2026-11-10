@@ -37,25 +37,18 @@ export default function Home() {
         </Text>
       </Card>
 
-      <View style={{ flexDirection: 'row', gap: 10 }}>
-        <View style={{ flex: 1 }}>
-          <Button title="+ Add a bill" onPress={() => router.push('/add')} />
-        </View>
-        <View style={{ flex: 1 }}>
-          <Button title="📷 Scan a bill" variant="secondary" onPress={() => router.push('/scan')} />
-        </View>
-      </View>
+      <Button title="+ Add a bill" onPress={() => router.push('/add')} />
 
       {accounts.length === 0 && (
         <Card>
           <Text style={styles.h2}>Add your bills once</Text>
           <Text style={styles.body}>
             Tap <Text style={{ fontWeight: '700' }}>Add a bill</Text> and enter the reference number from your
-            electricity or gas bill. BillWise checks it for you every time you open the app.
+            electricity bill (LESCO, FESCO, IESCO…). BillWise checks it for you every time you open the app.
           </Text>
           <Text style={styles.body}>
-            For any other bill (school fees, PTCL, K-Electric…), tap{' '}
-            <Text style={{ fontWeight: '700' }}>Scan a bill</Text> and take a photo. AI reads it for you.
+            Other bills (gas, PTCL, K-Electric, school fees…) can be added too: you type in the amount and due date
+            each month.
           </Text>
         </Card>
       )}
@@ -93,7 +86,7 @@ export default function Home() {
                       ? 'Checking for your bill…'
                       : provider && canAutoFetch(provider)
                         ? 'No bill yet. Pull down to check again.'
-                        : 'No bill yet. Use “Scan a bill” to add one.'}
+                        : 'No bill yet. Tap to enter this month’s bill.'}
                   </Text>
                 )}
                 {account.lastError && !isChecking ? <Text style={styles.error}>⚠️ {account.lastError}</Text> : null}

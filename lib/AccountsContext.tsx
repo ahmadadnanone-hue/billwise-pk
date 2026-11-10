@@ -1,12 +1,12 @@
 // Keeps the list of accounts in one place so every screen sees the same data.
 // (A React "context" is a shared box that any screen can read from.)
 
+import { Platform } from 'react-native';
 import React, { createContext, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import type { BillReading } from '@/shared/bill-reading';
 import { canAutoFetch, getProvider } from '@/shared/providers';
-import { fetchLatestBill, mergeBill, sameReference, toBillRecord } from './fetchBill';
+import { fetchLatestBill, mergeBill } from './fetchBill';
 import { loadAccounts, saveAccounts } from './storage';
-import type { Account } from './types';
+import type { Account, BillRecord } from './types';
 
 /** Check each auto-fetch bill at most this often when the app opens. */
 const AUTO_REFRESH_AFTER_MS = 12 * 60 * 60 * 1000;
@@ -20,11 +20,8 @@ interface AccountsContextValue {
   removeAccount: (id: string) => void;
   refreshAccount: (id: string) => Promise<void>;
   refreshAll: () => Promise<void>;
-  /**
-   * Saves a scanned bill to `accountId` if given, else to an account with the same
-   * reference number, else to a new account. Returns the account id.
-   */
-  saveScan: (reading: BillReading, providerId: string, accountId?: string) => string;
+  /** Saves a bill the user typed in. Replaces that month's bill if there is one. */
+  saveManualBill: (accountId: string, record: BillRecord) => void;
   setPaid: (accountId: string, month: string, paid: boolean) => void;
 }
 
@@ -54,17 +51,17 @@ export function AccountsProvider({ children }: { children: ReactNode }) {
     async (id: string) => {
       const account = accountsRef.current.find((a) => a.id === id);
       const provider = account && getProvider(account.providerId);
-      if (!account || !provider || !canAutoFetch(provider)) return;
+      // Websites can't read other websites' pages, so automatic checks run in the phone app only.
+      if (!account || !provider || !canAutoFetch(provider) || Platform.OS === 'web') return;
 
       setChecking((c) => [...c, id]);
       try {
-        const reading = await fetchLatestBill(account);
-        const record = toBillRecord(reading, 'auto');
+        const record = await fetchLatestBill(account);
         update(id, (a) => ({
           ...a,
           lastCheckedAt: new Date().toISOString(),
-          lastError: record ? null : reading.problem ?? 'No bill found for this reference number.',
-          bills: record ? mergeBill(a.bills, record) : a.bills,
+          lastError: null,
+          bills: mergeBill(a.bills, record),
         }));
       } catch (err) {
         update(id, (a) => ({ ...a, lastCheckedAt: new Date().toISOString(), lastError: (err as Error).message }));
@@ -122,32 +119,11 @@ export function AccountsProvider({ children }: { children: ReactNode }) {
     setAccounts((prev) => prev.filter((a) => a.id !== id));
   }, []);
 
-  const saveScan: AccountsContextValue['saveScan'] = useCallback((reading, providerId, accountId) => {
-    const record = toBillRecord(reading, 'scan');
-    if (!record) throw new Error(reading.problem ?? 'No bill found in this photo.');
-    const reference = reading.reference_number ?? '';
-    const match = accountsRef.current.find(
-      (a) =>
-        a.id === accountId || (a.providerId === providerId && reference && sameReference(a.reference, reference)),
-    );
-    if (match) {
-      setAccounts((prev) => prev.map((a) => (a.id === match.id ? { ...a, bills: mergeBill(a.bills, record) } : a)));
-      return match.id;
-    }
-    const account: Account = {
-      id: newId(),
-      providerId,
-      reference,
-      nickname: reading.company || getProvider(providerId)?.name || 'Scanned bill',
-      createdAt: new Date().toISOString(),
-      lastCheckedAt: null,
-      lastError: null,
-      bills: [record],
-    };
-    accountsRef.current = [...accountsRef.current, account];
-    setAccounts((prev) => [...prev, account]);
-    return account.id;
-  }, []);
+  const saveManualBill = useCallback(
+    (accountId: string, record: BillRecord) =>
+      update(accountId, (a) => ({ ...a, lastError: null, bills: mergeBill(a.bills, record) })),
+    [update],
+  );
 
   const setPaid = useCallback(
     (accountId: string, month: string, paid: boolean) =>
@@ -157,7 +133,7 @@ export function AccountsProvider({ children }: { children: ReactNode }) {
 
   return (
     <AccountsContext.Provider
-      value={{ accounts, loading, checking, addAccount, removeAccount, refreshAccount, refreshAll, saveScan, setPaid }}
+      value={{ accounts, loading, checking, addAccount, removeAccount, refreshAccount, refreshAll, saveManualBill, setPaid }}
     >
       {children}
     </AccountsContext.Provider>

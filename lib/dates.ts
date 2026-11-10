@@ -42,6 +42,29 @@ export function dueText(dueDate: string | null, paid: boolean): string {
   return `Due in ${days} day${days === 1 ? '' : 's'}`;
 }
 
+/** The month `back` months before this one, as "YYYY-MM". */
+export function monthsAgo(back: number, now = new Date()): string {
+  return currentMonth(new Date(now.getFullYear(), now.getMonth() - back, 1));
+}
+
+/** What people type, like "25-11-2026" or "25/11/26", → "2026-11-25". Null if it isn't a real date. */
+export function parseTypedDate(input: string): string | null {
+  const m = input.trim().match(/^(\d{1,2})[\s./-]+(\d{1,2})[\s./-]+(\d{2}|\d{4})$/);
+  if (!m) return null;
+  const [d, mo] = [Number(m[1]), Number(m[2])];
+  const y = m[3].length === 2 ? 2000 + Number(m[3]) : Number(m[3]);
+  const date = new Date(y, mo - 1, d);
+  if (date.getFullYear() !== y || date.getMonth() !== mo - 1 || date.getDate() !== d) return null; // e.g. 31-02
+  return `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+}
+
+/** "2026-11-25" → "25-11-2026" (the format people type) */
+export function toTypedDate(iso: string | null): string {
+  if (!iso || !isDate(iso)) return '';
+  const [y, m, d] = iso.split('-');
+  return `${d}-${m}-${y}`;
+}
+
 /** "2026-10" → "Oct 2026" */
 export function formatMonth(month: string): string {
   if (!isMonth(month)) return month;

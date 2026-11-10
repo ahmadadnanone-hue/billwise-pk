@@ -7,13 +7,10 @@ export interface BillRecord {
   /** "YYYY-MM-DD" */
   dueDate: string | null;
   unitsUsed: number | null;
-  unitsLabel: string | null;
-  /** Short explanation written by the AI. */
-  summary: string | null;
-  /** 'auto' = fetched from the company website, 'scan' = read from a photo. */
-  source: 'auto' | 'scan';
-  /** When we read this bill (ISO date-time). */
-  readAt: string;
+  /** 'auto' = read from the company website, 'manual' = typed in by the user. */
+  source: 'auto' | 'manual';
+  /** When we saved this bill (ISO date-time). */
+  savedAt: string;
   paid: boolean;
 }
 

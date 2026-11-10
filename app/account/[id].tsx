@@ -1,4 +1,4 @@
-// Details for one bill: latest bill, AI explanation, past months, paid ticks.
+// Details for one bill: latest bill, past months, paid ticks.
 
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { Alert, Platform, ScrollView, Text, View } from 'react-native';
@@ -55,13 +55,12 @@ export default function AccountDetails() {
             <Text style={styles.body}>
               {formatMonth(latest.month)} bill · due {formatDate(latest.dueDate)}
             </Text>
-            {latest.summary && <Text style={styles.body}>💡 {latest.summary}</Text>}
             <Row label="After due date" value={formatRs(latest.amountAfterDueDate)} />
             <Row
               label="Units used"
-              value={latest.unitsUsed != null ? `${latest.unitsUsed} ${latest.unitsLabel ?? ''}`.trim() : '—'}
+              value={latest.unitsUsed != null ? `${latest.unitsUsed}` : '—'}
             />
-            <Row label="Read from" value={latest.source === 'auto' ? 'Company website' : 'Your photo'} />
+            <Row label="Source" value={latest.source === 'auto' ? 'Company website' : 'Typed in by you'} />
             <Button
               title={latest.paid ? 'Mark as not paid' : '✓ Mark as paid'}
               variant={latest.paid ? 'secondary' : 'primary'}
@@ -77,14 +76,26 @@ export default function AccountDetails() {
         )}
       </Card>
 
-      {provider && canAutoFetch(provider) && (
+      {provider && canAutoFetch(provider) && Platform.OS !== 'web' && (
         <Button title="Check now" variant="secondary" loading={isChecking} onPress={() => refreshAccount(account.id)} />
       )}
+      {provider && canAutoFetch(provider) && Platform.OS === 'web' && (
+        <Text style={styles.muted}>
+          On the phone app, this bill is checked automatically. On the website, please enter it by hand.
+        </Text>
+      )}
       <Button
-        title="📷 Scan this bill"
+        title="✏️ Enter a bill by hand"
         variant="secondary"
-        onPress={() => router.push({ pathname: '/scan', params: { accountId: account.id } })}
+        onPress={() => router.push({ pathname: '/enter', params: { accountId: account.id } })}
       />
+      {latest && (
+        <Button
+          title={`Edit the ${formatMonth(latest.month)} bill`}
+          variant="secondary"
+          onPress={() => router.push({ pathname: '/enter', params: { accountId: account.id, month: latest.month } })}
+        />
+      )}
 
       {older.length > 0 && (
         <Card>

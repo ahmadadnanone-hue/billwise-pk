@@ -17,7 +17,7 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" options={{ title: 'BillWise PK' }} />
         <Stack.Screen name="add" options={{ title: 'Add a bill', presentation: 'modal' }} />
-        <Stack.Screen name="scan" options={{ title: 'Scan a bill', presentation: 'modal' }} />
+        <Stack.Screen name="enter" options={{ title: 'Enter a bill', presentation: 'modal' }} />
         <Stack.Screen name="account/[id]" options={{ title: 'Bill details' }} />
       </Stack>
     </AccountsProvider>

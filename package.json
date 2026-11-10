@@ -8,14 +8,13 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build:web": "expo export --platform web",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^1.7.0",
     "@react-native-async-storage/async-storage": "2.2.0",
     "expo": "~54.0.33",
     "expo-constants": "~18.0.13",
-    "expo-image-picker": "~17.0.11",
     "expo-linking": "~8.0.11",
     "expo-router": "~6.0.23",
     "expo-status-bar": "~3.0.9",
@@ -24,12 +23,11 @@
     "react-native": "0.81.5",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
-    "react-native-web": "~0.21.0",
-    "zod": "^4.6.7"
+    "react-native-web": "~0.21.0"
   },
   "devDependencies": {
-    "@types/node": "^26.6.6",
     "@types/react": "~19.1.0",
+    "tsx": "^4.23.15",
     "typescript": "~5.9.2"
   },
   "private": true

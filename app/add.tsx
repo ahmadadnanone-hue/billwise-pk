@@ -16,7 +16,7 @@ export default function AddBill() {
 
   const provider = providerId ? getProvider(providerId) : undefined;
   const auto = PROVIDERS.filter(canAutoFetch);
-  const scanOnly = PROVIDERS.filter((p) => !canAutoFetch(p));
+  const manualOnly = PROVIDERS.filter((p) => !canAutoFetch(p));
 
   const save = () => {
     if (!provider) return setError('Please choose the company first.');
@@ -53,8 +53,8 @@ export default function AddBill() {
         <Text style={styles.label}>1. Which company sends this bill?</Text>
         <Text style={styles.muted}>Checked automatically:</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>{auto.map((p) => choice(p.id, p.name))}</View>
-        <Text style={styles.muted}>Add by scanning a photo each month:</Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>{scanOnly.map((p) => choice(p.id, p.name))}</View>
+        <Text style={styles.muted}>You type in the amount each month:</Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>{manualOnly.map((p) => choice(p.id, p.name))}</View>
 
         {provider && (
           <>
@@ -66,7 +66,7 @@ export default function AddBill() {
                 setReference(t);
                 setError(null);
               }}
-              placeholder={provider.referenceDigits ? '0'.repeat(provider.referenceDigits) : 'Reference number'}
+              placeholder={provider.referenceDigits ? '0'.repeat(provider.referenceDigits) : 'Reference number (optional)'}
               placeholderTextColor={colors.muted}
               keyboardType={provider.referenceDigits ? 'number-pad' : 'default'}
               autoCapitalize="characters"
@@ -86,7 +86,8 @@ export default function AddBill() {
             {!canAutoFetch(provider) && (
               <Card style={{ backgroundColor: colors.warnBg, borderColor: colors.warnBg }}>
                 <Text style={styles.body}>
-                  We can't check {provider.name} online yet. After saving, use “Scan a bill” each month and we'll add it here.
+                  We can't check {provider.name} online yet. After saving, tap “Enter a bill by hand” each month to add
+                  the amount and due date.
                 </Text>
               </Card>
             )}
