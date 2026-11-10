@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!-- A made-up bill page with the same table layout as bill.pitc.com.pk (all values are fake). -->
+<html lang="en">
+<head><title>LESCO ONLINE BILL</title></head>
+<body>
+<form method="post" action="gbill.aspx?refno=04000000000000" id="ctl00">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="abc&amp;123" />
+<table class="maintable">
+  <tr>
+    <td>
+      <table class="nestable1">
+        <tr class="fontsize">
+          <td class="border-rb" style="width: 129px"><h4>CONNECTION DATE</h4></td>
+          <td class="border-rb"><h4>CONNECTED LOAD</h4></td>
+          <td class="border-rb"><h4>ED@</h4></td>
+          <td class="border-rb" style="width: 129px"><h4>BILL MONTH</h4></td>
+          <td class="border-rb" style="width: 157px"><h4>READING DATE </h4></td>
+          <td class="border-rb" style="width: 104px"><h4>ISSUE DATE</h4></td>
+          <td class="border-b" style="color: Red;"><h4>DUE DATE</h4></td>
+        </tr>
+        <tr style="height: 26px;" class="content">
+          <td class="border-rb" style="text-align: center;">01 JAN 20</td>
+          <td class="border-rb" style="text-align: center;"></td>
+          <td class="border-rb" style="text-align: center;">1.5%</td>
+          <td class="border-rb" style="text-align: center;">OCT 26</td>
+          <td class="border-rb" style="text-align: center;">20 OCT 26</td>
+          <td class="border-rb" style="text-align: center;">22 OCT 26</td>
+          <td class="border-b" style="text-align: center;">03 NOV 26</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table class="nested4">
+        <tr class="fontsize" style="height: 24px;">
+          <td class="border-rb nestedtdwidth"><b>UNITS CONSUMED</b></td>
+          <td class="border-rb nestedtdwidth content">
+            215
+            <br>
+          </td>
+          <td class="border-rb nestedtdwidth"><b>ELECTRICITY DUTY</b></td>
+          <td class="border-rb nestedtdwidth content">99</td>
+        </tr>
+      </table>
+      <table class="nested7">
+        <tr class="fontsize" style="height: 24px;">
+          <td class="border-rb nestedtd2width"><b>PAYABLE WITHIN DUE DATE</b></td>
+          <td colspan="3" class="border-b nestedtd2width content">
+            12,345
+            <br><span></span>
+          </td>
+        </tr>
+        <tr class="fontsize" style="height: 19px;">
+          <td class="border-rb nestedtd2width"><b>L.P.SURCHARGE</b></td>
+          <td colspan="3" rowspan="2" class="border-b nestedtd2width content">
+            <div>
+              <div>500 <span>Till 08-NOV-26</span> 12845</div>
+              <div>1000 <span>After 08-NOV-26</span> 13345</div>
+            </div>
+          </td>
+        </tr>
+        <tr class="fontsize" style="height: 19px;">
+          <td class="border-rb nestedtd2width"><b>PAYABLE AFTER DUE DATE</b></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- The small slip at the bottom of the bill repeats some values. -->
+<table class="nested7">
+  <tr>
+    <td>OCT 26</td>
+    <td>03 NOV 26</td>
+    <td>04 00000 0000000 U</td>
+    <td>PAYABLE AFTER DUE DATE</td>
+    <td>Till 08-NOV-26 12845 After 08-NOV-26 13345</td>
+  </tr>
+</table>
+</form>
+</body>
+</html>
